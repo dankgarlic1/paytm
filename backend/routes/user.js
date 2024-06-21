@@ -4,6 +4,7 @@ const zod = require("zod");
 const jwt = require("jsonwebtoken");
 const { User } = require("../db");
 const { JWT_SECRET } = require("../config");
+const { authMiddleware } = require("../middleware");
 
 //user routes
 
@@ -56,5 +57,49 @@ router.post("/signin", async (req, res) => {
     token: token,
   });
 });
+const updateInfo = zod.Schema({
+  password: zod.string().min(6),
+  firstName: zod.string().max(50),
+  lastName: zod.string().max(50),
+});
+router.put("/update", authMiddleware, async (req, res) => {
+  const validatedData = updateInfo.safeParse(req.body);
+  const { userId } = req;
+  await User.updateOne(validatedData, {
+    id: userId,
+  });
 
+  res.json({
+    message: "Updated Successfully",
+  });
+});
+
+//get users by their name filterable
+
+router.get("/bulk", async (req, res) => {
+  const filter = req.query.filter || "";
+  const users = await User.find({
+    $or: [
+      {
+        firstName: {
+          $regex: filter,
+        },
+      },
+      {
+        lastName: {
+          $regex: filter,
+        },
+      },
+    ],
+  });
+
+  res.json({
+    user: users.map((user) => ({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      _id: user._id,
+    })),
+  });
+});
 module.exports = router;
