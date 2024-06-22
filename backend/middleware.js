@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("./config");
 
-export async function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const bearerHeader = req.headers.authorization;
   if (!bearerHeader) {
     return res.status(403).json({

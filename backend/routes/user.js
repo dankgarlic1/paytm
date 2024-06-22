@@ -16,16 +16,18 @@ const signupSchema = zod.object({
   username: zod.string().min(3).max(30).email(),
 });
 
-router.post("signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const validateData = signupSchema.safeParse(req.body);
-  const existingUser = await User.findOne({ username: validateData.username });
-  if (!validateData || existingUser._id) {
-    return res.json({
-      message: "Email already taken / Incorrect inputs",
+  const { firstName, lastName, password, username } = validateData.data;
+  const existingUser = await User.findOne({
+    username,
+  });
+  if (existingUser) {
+    return res.status(400).json({
+      message: "Email already taken",
     });
   }
-
-  const user = await User.create(validateData);
+  const user = await User.create(validateData.data);
 
   const userId = user._id;
 
@@ -65,7 +67,7 @@ router.post("/signin", async (req, res) => {
     token: token,
   });
 });
-const updateInfo = zod.Schema({
+const updateInfo = zod.object({
   password: zod.string().min(6),
   firstName: zod.string().max(50),
   lastName: zod.string().max(50),
@@ -73,13 +75,28 @@ const updateInfo = zod.Schema({
 router.put("/update", authMiddleware, async (req, res) => {
   const validatedData = updateInfo.safeParse(req.body);
   const { userId } = req;
-  await User.updateOne(validatedData, {
-    id: userId,
-  });
+  const updateData = validatedData.data;
 
-  res.json({
-    message: "Updated Successfully",
-  });
+  try {
+    await User.updateOne({ _id: userId }, { $set: updateData });
+    res.json({
+      message: "Updated Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating user information",
+      error: error.message,
+    });
+  }
+  // console.log(userId);
+
+  // await User.updateOne(validatedData, {
+  //   _id: userId,
+  // });
+
+  // res.json({
+  //   message: "Updated Successfully",
+  // });
 });
 
 //get users by their name filterable
