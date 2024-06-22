@@ -88,15 +88,6 @@ router.put("/update", authMiddleware, async (req, res) => {
       error: error.message,
     });
   }
-  // console.log(userId);
-
-  // await User.updateOne(validatedData, {
-  //   _id: userId,
-  // });
-
-  // res.json({
-  //   message: "Updated Successfully",
-  // });
 });
 
 //get users by their name filterable
