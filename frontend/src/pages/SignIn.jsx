@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const SignIn = () => {
@@ -9,6 +10,9 @@ export const SignIn = () => {
   const navigateToDashboard = () => {
     navigate("/dashboard");
   };
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="bg-slate-300  flex justify-center py-10">
       <div className="flex flex-col rounded shadow-md h-max bg-white p-8 w-96">
@@ -22,6 +26,9 @@ export const SignIn = () => {
           <input
             placeholder="xyz@penguin.com"
             className="w-full h-10 px-3 border rounded border-slate-200"
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
           />
         </div>
         <div className="w-full mt-4">
@@ -29,13 +36,25 @@ export const SignIn = () => {
           <input
             type="password"
             className="w-full h-10 px-3 border rounded border-slate-200"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
         </div>
         <div className="w-full mt-6">
           <button
             type="button"
             className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2"
-            onClick={() => navigateToDashboard()}
+            onClick={async () => {
+              const response = await axios.post(
+                "http://localhost:3000/api/v1/user/signin",
+                {
+                  username,
+                  password,
+                }
+              );
+              navigateToDashboard();
+            }}
           >
             Sign In
           </button>

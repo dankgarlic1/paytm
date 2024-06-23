@@ -1,7 +1,26 @@
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 
-export const Dashboard = () => {
+export const Dashboard = async () => {
+  // const [balance, setBalance] = useState(0);
+  // const token = localStorage.getItem("token");
+  // // console.log(token);
+
+  // const response = await axios.get(
+  //   "http://localhost:3000/api/v1/account/balance",
+  //   {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   }
+  // );
+  // setBalance(response.data.balance);
+  // console.log(balance);
+
   const navigate = useNavigate();
+
   const navigateToSendMoney = () => {
     navigate("/send");
   };
@@ -23,7 +42,7 @@ export const Dashboard = () => {
 
       <div className=" flex ml-10">
         <div className=" font-bold text-lg">Your balance </div>
-        <div className="font-semibold ml-4 text-lg"> Rs 10,000</div>
+        <div className="font-semibold ml-4 text-lg"> Rs {balance} </div>
       </div>
       <div className=" flex flex-col ml-10 mt-6">
         <div className=" font-bold text-lg">User </div>

@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const SignUp = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
   const navigateToSignIn = () => {
     navigate("/signin");
@@ -20,6 +26,9 @@ export const SignUp = () => {
           <input
             placeholder="John"
             className="w-full h-10 px-3 border rounded border-slate-200"
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
           />
         </div>
         <div className="w-full mt-4">
@@ -29,6 +38,9 @@ export const SignUp = () => {
           <input
             placeholder="Doe"
             className="w-full h-10 px-3 border rounded border-slate-200"
+            onChange={(e) => {
+              setLastName(e.target.value);
+            }}
           />
         </div>
         <div className="w-full mt-4">
@@ -36,6 +48,9 @@ export const SignUp = () => {
           <input
             placeholder="xyz@penguin.com"
             className="w-full h-10 px-3 border rounded border-slate-200"
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
           />
         </div>
         <div className="w-full mt-4">
@@ -43,12 +58,27 @@ export const SignUp = () => {
           <input
             type="password"
             className="w-full h-10 px-3 border rounded border-slate-200"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
         </div>
         <div className="w-full mt-6">
           <button
             type="button"
-            onClick={() => navigateToSignIn()}
+            onClick={async () => {
+              const response = await axios.post(
+                "http://localhost:3000/api/v1/user/signup",
+                {
+                  firstName,
+                  lastName,
+                  password,
+                  username,
+                }
+              );
+              localStorage.setItem("token", response.data.token);
+              navigateToSignIn();
+            }}
             className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2"
           >
             Sign Up
