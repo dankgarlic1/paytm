@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
+  const navigate = useNavigate();
+  const navigateToSignIn = () => {
+    navigate("/signin");
+  };
   return (
     <div className="bg-slate-300  flex justify-center py-10">
       <div className="flex flex-col rounded shadow-md h-max bg-white p-8 w-96">
@@ -43,6 +48,7 @@ export const SignUp = () => {
         <div className="w-full mt-6">
           <button
             type="button"
+            onClick={() => navigateToSignIn()}
             className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2"
           >
             Sign Up
@@ -50,7 +56,12 @@ export const SignUp = () => {
         </div>
         <div className="w-full mt-4 text-center text-sm font-semibold ">
           Already have an account?{" "}
-          <span className="underline cursor-pointer">Login</span>
+          <span
+            className="underline cursor-pointer"
+            onClick={() => navigateToSignIn()}
+          >
+            Login
+          </span>
         </div>
       </div>
     </div>

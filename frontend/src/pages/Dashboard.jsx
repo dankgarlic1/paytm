@@ -1,4 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 export const Dashboard = () => {
+  const navigate = useNavigate();
+  const navigateToSendMoney = () => {
+    navigate("/send");
+  };
   return (
     <div>
       <div className="flex justify-between p-4  h-14">
@@ -39,7 +45,10 @@ export const Dashboard = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center h-full  ">
-              <button className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5">
+              <button
+                className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                onClick={() => navigateToSendMoney()}
+              >
                 Send Money
               </button>
             </div>
